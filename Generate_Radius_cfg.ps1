@@ -1,5 +1,5 @@
 # Define the input and output file paths
-$configFile = "IOS-XE-IBNS2_0.cfg" # Input file with Jinja2 variables
+$configFile = "IOS-XE-IBNS2_0-Template.cfg" # Input file with Jinja2 variables
 $outputFile = "IOS-XE-IBNS2_0-Final.cfg" # Final configuration file
 
 # Ensure the input file exists
