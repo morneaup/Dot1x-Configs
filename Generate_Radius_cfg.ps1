@@ -1,6 +1,40 @@
-# Define the input and output file paths
-$configFile = "IOS-XE-IBNS2_0-Template.cfg" # Input file with Jinja2 variables
-$outputFile = "IOS-XE-IBNS2_0-Final.cfg" # Final configuration file
+# Define configuration file paths
+$ConfigFiles = @{
+    "1" = ".\IOS-XE\IOS-XE-IBNS2_0-Template.cfg"
+    "2" = ".\IOS\IOS-IBNS2_0-Template.cfg"
+    "3" = ".\NX-OS\NX-OS-MAB-Only-Template.cfg"
+}
+
+# Define output file paths corresponding to each config type
+$OutputFiles = @{
+    "1" = "IOS-XE-IBNS2_0.cfg"
+    "2" = "IOS-IBNS2_0.cfg"
+    "3" = "NX-OS-MAB-Only.cfg"
+}
+
+# Display menu
+Write-Host "Select a configuration option:`n"
+Write-Host "1) IOS-XE"
+Write-Host "2) IOS"
+Write-Host "3) NX-OS"
+
+# Read user selection
+$selection = Read-Host "`nEnter the number of your choice"
+
+# Validate and assign configuration path
+if ($ConfigFiles.ContainsKey($selection)) {
+    $ConfigFile = $ConfigFiles[$selection]
+    $outputFile = $OutputFiles[$selection]
+    Write-Host "`nYou selected: $ConfigFile"
+    Write-Host "Output will be saved to: $outputFile"
+} else {
+    Write-Host "`nInvalid selection. Please run the script again and choose 1, 2, or 3." -ForegroundColor Red
+    exit 1
+}
+
+# Example use of the selected config path
+# (You can replace this with your own logic to load/apply the config)
+Write-Host "`nUsing configuration file at path: $ConfigPath"
 
 # Ensure the input file exists
 if (-not (Test-Path $configFile)) {
@@ -16,7 +50,7 @@ $variablePattern = "{{\s*([\w-]+)\s*}}"
 
 # Extract all unique variable names (case-insensitively)
 $matches = [regex]::Matches($configContent, $variablePattern)
-$uniqueVariables = ($matches | ForEach-Object { $_.Groups[1].Value.ToLower() }) | Sort-Object -Unique
+$uniqueVariables = ($matches | ForEach-Object { $_.Groups[1].Value.ToUpper() }) | Sort-Object -Unique
 
 # Initialize a hashtable to store variable values
 $variables = @{}
